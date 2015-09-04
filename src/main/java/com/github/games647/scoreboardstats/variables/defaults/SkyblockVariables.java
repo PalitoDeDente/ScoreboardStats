@@ -39,7 +39,7 @@ public class SkyblockVariables extends VariableReplaceAdapter<uSkyBlockAPI> impl
     }
 
     @Override
-    public void onReplace(Player player, String variable, ReplaceEvent replaceEvent) {
+    public void onReplace(Player player, String variable, ReplaceEvent replaceEvent) {  
         replaceEvent.setScore(NumberConversions.round(getPlugin().getIslandLevel(player)));
         replaceEvent.setConstant(true);
     }

@@ -7,6 +7,7 @@ import com.github.games647.scoreboardstats.variables.VariableReplaceAdapter;
 
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -25,12 +26,13 @@ public class VaultVariables extends VariableReplaceAdapter<Plugin> {
 
     private final Economy economy;
     private final Chat chat;
+    private final Permission perms;
 
     /**
      * Creates a new vault replacer
      */
     public VaultVariables() {
-        super(Bukkit.getPluginManager().getPlugin("Vault"), "money", "playerInfo_*");
+        super(Bukkit.getPluginManager().getPlugin("Vault"), "money", "playerInfo_*", "group");
 
         checkVersion();
 
@@ -41,6 +43,13 @@ public class VaultVariables extends VariableReplaceAdapter<Plugin> {
             throw new UnsupportedPluginException("Cannot find an economy plugin");
         } else {
             economy = economyProvider.getProvider();
+        }        
+      
+        final RegisteredServiceProvider<Permission> permProvider = Bukkit.getServer().getServicesManager().getRegistration(Permission.class);     
+        if(permProvider == null){
+        	perms = null;
+        } else{
+        	perms = permProvider.getProvider();
         }
 
         final RegisteredServiceProvider<Chat> chatProvider = Bukkit.getServicesManager().getRegistration(Chat.class);
@@ -59,6 +68,9 @@ public class VaultVariables extends VariableReplaceAdapter<Plugin> {
         } else if (variable.startsWith("playerInfo_") && chat != null) {
             final int playerInfo = chat.getPlayerInfoInteger(player, variable.replace("playerInfo_", ""), -1);
             replaceEvent.setScore(playerInfo);
+        } else if (variable.equals("group") && perms != null){
+        	final String playerGroups = perms.getPlayerGroups(player)[0];
+        	replaceEvent.setScoreOrText(playerGroups);
         }
     }
 
