@@ -37,7 +37,7 @@ public class VaultVariables extends VariableReplaceAdapter<Plugin> {
      * Creates a new vault replacer
      */
     public VaultVariables() {
-        super(Bukkit.getPluginManager().getPlugin("Vault"), "money", "playerInfo_*", "group");
+        super(Bukkit.getPluginManager().getPlugin("Vault"), "money", "playerInfo_*");
 
         checkVersion();
 
