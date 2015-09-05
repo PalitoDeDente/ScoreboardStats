@@ -1,19 +1,23 @@
 package com.github.games647.scoreboardstats.variables.defaults;
 
-import com.github.games647.scoreboardstats.Version;
-import com.github.games647.scoreboardstats.variables.ReplaceEvent;
-import com.github.games647.scoreboardstats.variables.UnsupportedPluginException;
-import com.github.games647.scoreboardstats.variables.VariableReplaceAdapter;
-
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.scoreboard.Objective;
 import org.bukkit.util.NumberConversions;
+
+import com.github.games647.scoreboardstats.SbManager;
+import com.github.games647.scoreboardstats.Version;
+import com.github.games647.scoreboardstats.variables.ReplaceEvent;
+import com.github.games647.scoreboardstats.variables.UnsupportedPluginException;
+import com.github.games647.scoreboardstats.variables.VariableReplaceAdapter;
+import com.gmail.nossr50.util.scoreboards.ScoreboardManager;
 
 /**
  * Replace the economy variable with Vault.
@@ -27,7 +31,8 @@ public class VaultVariables extends VariableReplaceAdapter<Plugin> {
     private final Economy economy;
     private final Chat chat;
     private final Permission perms;
-
+    private final String ranks[] = {"Servo", "Campones","Minerador","Plebeu","Assasino","Templario","Nobre","Rei"};
+    
     /**
      * Creates a new vault replacer
      */
@@ -68,11 +73,30 @@ public class VaultVariables extends VariableReplaceAdapter<Plugin> {
         } else if (variable.startsWith("playerInfo_") && chat != null) {
             final int playerInfo = chat.getPlayerInfoInteger(player, variable.replace("playerInfo_", ""), -1);
             replaceEvent.setScore(playerInfo);
-        } else if (variable.equals("group") && perms != null){
-        	final String playerGroups = perms.getPlayerGroups(player)[0];
-        	replaceEvent.setScoreOrText(playerGroups);
+        } 
+        if (perms != null){            	    	
+        	Objective obj = player.getScoreboard().getObjective(SbManager.getSbName());
+        	if(obj == null)
+        		return;        	
+        	obj.setDisplayName(ChatColor.GREEN+""+ChatColor.BOLD+getGroup(perms, player));        	
         }
     }
+    
+    private String getGroup(Permission perm, Player pl){
+    	final String playerGroups[] = perms.getPlayerGroups(pl);    
+    	for(String playerGroup : playerGroups)
+		{
+			for(String ranks : ranks)
+			{
+				if(playerGroup.equals(ranks))
+				{
+					return playerGroup;
+				}
+			}
+		}
+    	return playerGroups[0];
+    }
+    
 
     /**
      * Check if the server has Vault above 1.4.1 installed, because there they

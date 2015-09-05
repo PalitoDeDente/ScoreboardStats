@@ -11,7 +11,17 @@ import org.bukkit.entity.Player;
  */
 public abstract class SbManager {
 
-    protected static final String SB_NAME = "Stats";
+    public static String getSbName()
+	{
+		return SB_NAME;
+	}
+
+	public static String getTempSbName()
+	{
+		return TEMP_SB_NAME;
+	}
+
+	protected static final String SB_NAME = "Stats";
     protected static final String TEMP_SB_NAME = SB_NAME + 'T';
 
     private static final int MAX_ITEM_LENGTH = 16;
