@@ -17,7 +17,7 @@ import com.github.games647.scoreboardstats.Version;
 import com.github.games647.scoreboardstats.variables.ReplaceEvent;
 import com.github.games647.scoreboardstats.variables.UnsupportedPluginException;
 import com.github.games647.scoreboardstats.variables.VariableReplaceAdapter;
-import com.gmail.nossr50.util.scoreboards.ScoreboardManager;
+
 
 /**
  * Replace the economy variable with Vault.
